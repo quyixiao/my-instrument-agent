@@ -6,13 +6,7 @@ import javassist.*;
 import java.lang.instrument.ClassFileTransformer;
 import java.security.ProtectionDomain;
 
-/**
- * TTL {@link ClassFileTransformer} of Java Agent
- *
- * @author Jerry Lee (oldratlee at gmail dot com)
- * @see ClassFileTransformer
- * @since 0.9.0
- */
+
 public class PerfMonXTransformer implements ClassFileTransformer {
 
 
@@ -32,7 +26,7 @@ public class PerfMonXTransformer implements ClassFileTransformer {
                     // init variable tracer
                     if ("testMyName".equals(method.getName())) {
                         System.out.println(method.getName());
-                        doMethod(method,ctClass);
+                        doMethod(ctClass,method);
                         // addTiming(ctClass,method.getName());
                     }
                 }
@@ -49,8 +43,8 @@ public class PerfMonXTransformer implements ClassFileTransformer {
         return null;
     }
 
-    private static void addTiming(CtClass clazz, String method) throws NotFoundException, CannotCompileException {
-
+    private static void doMethod(CtClass clazz, CtBehavior ctBehavior) throws NotFoundException, CannotCompileException {
+        String method = ctBehavior.getName();
         //获取方法信息,如果方法不存在，则抛出异常
         CtMethod ctMethod = clazz.getDeclaredMethod(method);
         //将旧的方法名称进行重新命名，并生成一个方法的副本，该副本方法采用了过滤器的方式
@@ -91,17 +85,13 @@ public class PerfMonXTransformer implements ClassFileTransformer {
         System.out.println(body.toString());
     }
 
-    private void doMethod(CtBehavior method ,CtClass ctClass) throws NotFoundException, CannotCompileException {
+    private void doMethodBak(CtClass ctClass,CtBehavior method ) throws NotFoundException, CannotCompileException {
         StringBuffer body = new StringBuffer();
-        body.append("{\n long start = System.nanoTime();\n");
-        //可以通过$$将传递给拦截器的参数，传递给原来的方法
-        //  finish body text generation with call to print the timing
-        //  information, and return saved value (if not void)
-
-        body.append("System.out.println(\"Call to method  took \" + \n (System.nanoTime()-start) + " +  "\" ms.\");\n");
+        body.append("{\n long time = System.nanoTime();\n");
+        body.append("System.out.println(\"Call to method  took \" + \n (System.nanoTime()-time) + " +  "\" ms.\");\n");
         body.append("}");
         method.setBody(body.toString());
         //method.insertBefore("long time = System.nanoTime();");
-        //method.insertAfter("System.out.println(System.nanoTime() - time);");
+        //method.insertAfter("System.out.println(System.nanoTime());");
     }
 }

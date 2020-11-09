@@ -65,20 +65,6 @@
         </dependency>
 
 
-
-
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>3.2.4</version>
-        </dependency>
-
-
-
-
-
-
-
     </dependencies>
 
     <distributionManagement>
@@ -169,13 +155,6 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <!--
-                                Instrumentation Specification
-                                    - https://docs.oracle.com/javase/10/docs/technotes/guides/instrumentation/index.html
-                                    - https://docs.oracle.com/javase/10/docs/api/java/lang/instrument/package-summary.html#package.description
-                                JAR Manifest - JAR File Specification
-                                    - https://docs.oracle.com/javase/10/docs/technotes/guides/jar/jar.html#JAR_Manifest
-                            -->
                             <Premain-Class>com.spring.test.PerfMonAgent</Premain-Class>
                             <Boot-Class-Path>${project.artifactId}-${project.version}.jar</Boot-Class-Path>
                             <Can-Redefine-Classes>false</Can-Redefine-Classes>
