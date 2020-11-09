@@ -33,7 +33,7 @@ public class PerfMonXTransformer implements ClassFileTransformer {
                     if ("testMyName".equals(method.getName())) {
                         System.out.println(method.getName());
                         doMethod(method,ctClass);
-                       // addTiming(ctClass,method.getName());
+                        // addTiming(ctClass,method.getName());
                     }
                 }
                 if(classFile.contains("App")){
